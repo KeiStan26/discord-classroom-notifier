@@ -105,7 +105,12 @@ class TestConfigValidation:
                 "course_id": "999888777",
                 "course_name": "Mathematics",
                 "enabled": True,
-            }
+            },
+            {
+                "course_id": "",  # Empty ID should be safely ignored
+                "course_name": "Unconfigured Template",
+            },
+            {},  # Empty dict should be safely ignored
         ]
         courses_file.write_text(json.dumps(courses_data), encoding="utf-8")
 

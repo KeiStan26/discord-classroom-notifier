@@ -191,6 +191,12 @@ def load_config(env_file: str | None = None) -> AppConfig:
                 raw_list = json.load(f)
                 if isinstance(raw_list, list):
                     for item in raw_list:
+                        if not isinstance(item, dict):
+                            continue
+                        cid = str(item.get("course_id", "")).strip()
+                        if not cid:
+                            # 未入力のテンプレート行や空行は安全にスキップ
+                            continue
                         loaded_courses.append(CourseConfig(**item))
         except Exception as e:
             raise ValueError(
