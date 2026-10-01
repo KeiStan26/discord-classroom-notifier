@@ -94,7 +94,9 @@ class AppConfig(BaseModel):
     )
 
     # Discord Defaults
-    discord_default_webhook_url: str = Field(..., description="Default Discord Webhook URL")
+    discord_default_webhook_url: str | None = Field(
+        default=None, description="Default Discord Webhook URL"
+    )
     default_mention: str | None = Field(default=None, description="Default Discord mention string")
 
     # Notification targets
@@ -125,11 +127,10 @@ class AppConfig(BaseModel):
 
     @field_validator("discord_default_webhook_url")
     @classmethod
-    def check_default_webhook(cls, v: str) -> str:
-        validated = validate_discord_webhook_url(v)
-        if not validated:
-            raise ValueError("discord_default_webhook_url must be provided and valid.")
-        return validated
+    def check_default_webhook(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        return validate_discord_webhook_url(v)
 
     @field_validator("default_mention")
     @classmethod
@@ -161,7 +162,7 @@ def load_config(env_file: str | None = None) -> AppConfig:
     else:
         load_dotenv(override=True)
 
-    default_webhook = os.getenv("DISCORD_DEFAULT_WEBHOOK_URL", "")
+    default_webhook = os.getenv("DISCORD_DEFAULT_WEBHOOK_URL", "").strip() or None
     creds_file = os.getenv("GOOGLE_CREDENTIALS_FILE", "credentials.json")
     token_file = os.getenv("GOOGLE_TOKEN_FILE", "token.json")
     default_mention = os.getenv("DEFAULT_MENTION") or None

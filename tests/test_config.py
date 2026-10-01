@@ -93,6 +93,10 @@ class TestConfigValidation:
         )
         assert cfg.check_interval_seconds == 60
 
+        # Optional webhook url for auth / list-courses setup commands
+        cfg_no_webhook = AppConfig(check_interval_seconds=60)
+        assert cfg_no_webhook.discord_default_webhook_url is None
+
     # 5. Load Config with courses.json
     def test_load_config_with_custom_file(self, tmp_path: Path):
         courses_file = tmp_path / "courses.json"

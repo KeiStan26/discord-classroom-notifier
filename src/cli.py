@@ -79,6 +79,14 @@ def cmd_test_notify(args):
     """Send a test notification to verify Discord webhook."""
     config = load_config(args.env_file)
     setup_logger(level="INFO", log_file=None)
+    if not config.discord_default_webhook_url:
+        print(
+            "❌ エラー: DISCORD_DEFAULT_WEBHOOK_URL が設定されていません。\n"
+            ".env ファイルを作成し、DISCORD_DEFAULT_WEBHOOK_URL を設定してください。",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
     print(f"Discord Webhook へのテスト送信中: {config.discord_default_webhook_url}")
     client = DiscordClient()
     success = client.send_test_message(
@@ -98,6 +106,15 @@ def cmd_test_notify(args):
 def cmd_run(args):
     """Execute checking cycle once or in daemon loop."""
     config = load_config(args.env_file)
+    has_course_webhook = any(c.webhook_url for c in config.courses if c.enabled)
+    if not config.discord_default_webhook_url and not has_course_webhook:
+        print(
+            "❌ エラー: Discord Webhook URL が設定されていません。\n"
+            ".env の DISCORD_DEFAULT_WEBHOOK_URL または config/courses.json の各クラスの webhook_url を設定してください。",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
     setup_logger(
         level=config.log_level,
         log_file=config.log_file,

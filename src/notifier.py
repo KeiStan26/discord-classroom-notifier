@@ -152,6 +152,12 @@ class NotifierService:
 
         # 送信先Webhookとメンションの決定
         webhook_url = course.webhook_url or self.config.discord_default_webhook_url
+        if not webhook_url:
+            logger.error(
+                f"No Webhook URL configured for course {course.course_id} and no default webhook set. Skipping."
+            )
+            return 0
+
         mention = course.mention if course.mention is not None else self.config.default_mention
 
         sent_count = 0
