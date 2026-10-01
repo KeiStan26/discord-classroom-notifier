@@ -1,0 +1,10 @@
+# ==============================================================================
+# Google Classroom to Discord Notifier - Crontab 設定例
+# ==============================================================================
+# `crontab -e` でユーザーのcron設定に追記してください。
+# 5分おきに実行し、/var/log/classroom-notifier.log に追記します。
+# ※ Python内部にSingleInstanceLockがありますが、シェル側でもflockによる二重起動防止が可能です。
+# ==============================================================================
+
+# 5分間隔で定期ポーリング実行
+*/5 * * * * /usr/bin/flock -n /opt/classroom-notifier/data/cron.lock /opt/classroom-notifier/.venv/bin/python -m src.cli run >> /var/log/classroom-notifier.log 2>&1

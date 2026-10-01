@@ -1,0 +1,14 @@
+[Unit]
+Description=Run Google Classroom Notifier periodically every 5 minutes
+
+[Timer]
+# システム起動後2分後に初回実行
+OnBootSec=2min
+# その後5分間隔で定期実行
+OnUnitActiveSec=5min
+# 複数サーバーや同時起動時の負荷分散用ランダムジッター（30秒）
+RandomizedDelaySec=30s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

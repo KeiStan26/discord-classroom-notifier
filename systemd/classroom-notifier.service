@@ -1,0 +1,29 @@
+[Unit]
+Description=Google Classroom to Discord Notifier (Daemon Service)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/classroom-notifier
+EnvironmentFile=/opt/classroom-notifier/.env
+ExecStart=/opt/classroom-notifier/.venv/bin/python -m src.cli run --daemon
+
+# 自動再起動・クラッシュ対策
+Restart=always
+RestartSec=15s
+
+# リソース制限とセキュリティサンドボックス
+LimitNOFILE=65536
+StandardOutput=append:/var/log/classroom-notifier.log
+StandardError=append:/var/log/classroom-notifier.error.log
+
+# 防御的設定（ファイルシステムの保護）
+ProtectSystem=full
+PrivateTmp=true
+ReadWritePaths=/opt/classroom-notifier/data /var/log
+
+[Install]
+WantedBy=multi-user.target

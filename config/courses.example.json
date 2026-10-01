@@ -1,0 +1,27 @@
+[
+  {
+    "course_id": "123456789012",
+    "course_name": "情報ネットワーク工学",
+    "enabled": true,
+    "webhook_url": "https://discord.com/api/webhooks/111111111111111111/example-webhook-token-alpha",
+    "mention": "<@&112233445566778899>",
+    "notify_announcements": true,
+    "notify_coursework": true,
+    "notify_materials": true
+  },
+  {
+    "course_id": "987654321098",
+    "course_name": "線形代数学 II",
+    "enabled": true,
+    "webhook_url": null,
+    "mention": "@here",
+    "notify_announcements": true,
+    "notify_coursework": true,
+    "notify_materials": false
+  },
+  {
+    "course_id": "555555555555",
+    "course_name": "休講中・通知停止クラス",
+    "enabled": false
+  }
+]

@@ -1,0 +1,17 @@
+[Unit]
+Description=Google Classroom to Discord Notifier (Batch One-Shot)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/classroom-notifier
+EnvironmentFile=/opt/classroom-notifier/.env
+ExecStart=/opt/classroom-notifier/.venv/bin/python -m src.cli run
+StandardOutput=append:/var/log/classroom-notifier.log
+StandardError=append:/var/log/classroom-notifier.error.log
+
+[Install]
+WantedBy=multi-user.target
