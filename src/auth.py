@@ -1,5 +1,6 @@
 """Google OAuth 2.0 authentication manager for Google Classroom API."""
 
+import logging
 import os
 import sys
 from pathlib import Path
@@ -26,6 +27,9 @@ class AuthError(Exception):
     pass
 
 
+logger = logging.getLogger("classroom_notifier.auth")
+
+
 def get_credentials(
     credentials_path: str = "credentials.json",
     token_path: str = "token.json",
@@ -47,11 +51,17 @@ def get_credentials(
     creds: Credentials | None = None
 
     # 1. 既存のトークンファイルが存在する場合は読み込み
+    # ※ scopes を指定しないことで、Googleから実際に付与されたスコープとの不一致によるロード拒絶を防止
     if token_file.exists():
         try:
-            creds = Credentials.from_authorized_user_file(str(token_file), scopes)
-        except Exception:
-            creds = None
+            creds = Credentials.from_authorized_user_file(str(token_file))
+        except Exception as e:
+            logger.warning(f"Failed to load token from '{token_file}': {e}")
+            try:
+                creds = Credentials.from_authorized_user_file(str(token_file), scopes)
+            except Exception as err:
+                logger.error(f"Error loading credentials from '{token_file}': {err}")
+                creds = None
 
     # 2. トークンが存在し期限切れならリフレッシュ
     if creds and creds.expired and creds.refresh_token:
@@ -60,7 +70,8 @@ def get_credentials(
             # 更新されたトークンを安全に再保存 (パーミッション 0600)
             _save_credentials_safely(creds, token_file)
             return creds
-        except Exception:
+        except Exception as e:
+            logger.error(f"Failed to refresh OAuth token: {e}")
             creds = None
 
     # 3. 有効なトークンがあれば返却
