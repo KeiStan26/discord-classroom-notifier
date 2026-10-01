@@ -192,10 +192,14 @@ sudo systemctl status classroom-notifier.service
 ### 4-2. 初回認証トークン（`token.json`）の取得
 Ubuntu Server は SSH 経由（CUI）であることが多いため、**初回認証は手元の Windows / Mac（GUIブラウザがある環境）で実行し、生成された `token.json` をサーバーへ転送する**方法が最も確実で簡単です。
 
-1. **ローカル PC 上で実行する場合**:
-   ```bash
-   # credentials.json を手元のローカルプロジェクトルートに配置
-   python -m src.cli auth
+1. **ローカル PC（Windows）上で実行する場合**:
+   ```powershell
+   # credentials.json を手元のローカルプロジェクトルートに配置後、仮想環境のPythonで実行
+   .\.venv\Scripts\python.exe -m src.cli auth
+
+   # または仮想環境を有効化して実行
+   # .\.venv\Scripts\Activate.ps1
+   # python -m src.cli auth
    ```
    ブラウザが開き、学校アカウントでのログインとアクセス許可を求められます。「許可」をクリックするとローカルに `token.json` が生成されます。
 

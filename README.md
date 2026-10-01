@@ -113,6 +113,10 @@ cp .env.example .env
 ### 4. 初回認証（トークン発行）
 
 ```bash
+# Windows (PowerShell) の場合（直接指定が確実です）
+.\.venv\Scripts\python.exe -m src.cli auth
+
+# または仮想環境有効化後に実行
 python -m src.cli auth
 ```
 
