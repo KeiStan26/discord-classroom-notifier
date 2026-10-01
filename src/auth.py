@@ -8,13 +8,15 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
+# Google OAuthlib でのスコープ順序変更や正規化による ScopeChanged 例外を許容する
+os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
+
 # Google Classroom API Read-only Scopes
 CLASSROOM_SCOPES: list[str] = [
     "https://www.googleapis.com/auth/classroom.courses.readonly",
     "https://www.googleapis.com/auth/classroom.announcements.readonly",
     "https://www.googleapis.com/auth/classroom.coursework.me.readonly",
     "https://www.googleapis.com/auth/classroom.courseworkmaterials.readonly",
-    "https://www.googleapis.com/auth/classroom.rosters.readonly",
 ]
 
 
