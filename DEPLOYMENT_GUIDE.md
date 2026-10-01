@@ -137,6 +137,16 @@ sudo chmod 0644 /etc/logrotate.d/classroom-notifier
 sudo cp systemd/classroom-notifier-batch.service /etc/systemd/system/
 sudo cp systemd/classroom-notifier-batch.timer /etc/systemd/system/
 
+# ※ 重要：サービスファイル内のパスとユーザー名を実際の環境に合わせて編集します
+# （例: ユーザー名が zyuuuukak1n、配置先が ~/running/classroom-notifier の場合）
+sudo nano /etc/systemd/system/classroom-notifier-batch.service
+# 以下の4行を実際の環境に合わせて変更して保存します：
+#   User=zyuuuukak1n
+#   Group=zyuuuukak1n
+#   WorkingDirectory=/home/zyuuuukak1n/running/classroom-notifier
+#   EnvironmentFile=/home/zyuuuukak1n/running/classroom-notifier/.env
+#   ExecStart=/home/zyuuuukak1n/running/classroom-notifier/.venv/bin/python -m src.cli run
+
 # systemd デーモンのリロード
 sudo systemctl daemon-reload
 

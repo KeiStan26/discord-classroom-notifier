@@ -5,13 +5,16 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
+# 実行ユーザーとグループ（ご自身のLinuxユーザー名に変更してください）
 User=ubuntu
 Group=ubuntu
+# アプリケーションの配置ディレクトリと仮想環境のPythonパス
 WorkingDirectory=/opt/classroom-notifier
 EnvironmentFile=/opt/classroom-notifier/.env
 ExecStart=/opt/classroom-notifier/.venv/bin/python -m src.cli run
-StandardOutput=append:/var/log/classroom-notifier.log
-StandardError=append:/var/log/classroom-notifier.error.log
+# journalctl でログを一元管理
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
